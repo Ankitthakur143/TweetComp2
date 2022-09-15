@@ -1,0 +1,21 @@
+/* .dashboard{
+    max-width: 40%;
+    float: right;
+} */
+
+.login{
+    padding: 1em;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.form{
+    background-color: rgb(252, 249, 249);
+  }
+

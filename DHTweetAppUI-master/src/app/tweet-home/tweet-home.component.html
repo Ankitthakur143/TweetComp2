@@ -1,0 +1,214 @@
+<p-toast></p-toast>
+<div class="container-fluid" >
+<!-- style="background-image:url(../../assets/images/tablet-coffee.jpg);background-size: contain;"> -->
+    <br>
+    <div class="row" style="padding-right: 2%;">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-2">
+            <h4>{{user.firstName}}&nbsp;{{user.lastName}}</h4>
+            <h5>{{user.userName}}</h5>
+        </div>
+        <div class="col-sm-7">
+            <form class="tweet" #userTweetForm="ngForm">
+                <div class="mb-3">
+                    <h4 style="color: blueviolet;">Tweet Dashboard</h4>
+                </div>
+                <div class="mb-3">
+                    <div class="textarea-wrapper">
+                        <textarea class="form-control" rows="3" cols="80" id="tweet" name="tweet"
+                            [(ngModel)]="tweets.tweetBody" #tweetBodyCtrl="ngModel" placeholder="What's in your mind..?"
+                            maxlength="144"></textarea>
+                    </div>
+                </div>
+                <p-button label="Tweet" icon="pi pi-twitter" styleClass="p-button-primary"
+                    [disabled]="tweets.tweetBody==''" (onClick)="postTweets();ClearFields();"></p-button>
+            </form>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+    <br>
+    <div class="row" style="padding-right: 2%;">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-7">
+            <p-tabView>
+                <p-tabPanel header="My Tweets">
+                    <div *ngFor="let tweets of myTweets">
+                        <p-card header="{{tweets.userName}}" subheader="{{tweets.datetime | date:'medium':'IST'}}"
+                            [style]="{width: '45 rem'}">
+                            <ng-template pTemplate="body">
+                                <h4>{{tweets.tweetBody}}</h4>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <span class="p-float-label" *ngIf="editBox==true">
+                                    <textarea id="float-input" [(ngModel)]="tweets.tweetBody" rows="3" cols="60"
+                                        pInputTextarea></textarea>
+                                    <label for="float-input"></label>
+                                </span>
+                                <p-button *ngIf="editBox==true" label="Update" icon="pi pi-check"
+                                    styleClass="p-button-success  p-button-sm" [style]="{'margin-right': '.5em'}"
+                                    (onClick)="editTweet(tweets);ClearFields();"></p-button>
+                                <p-button *ngIf="editBox==false" styleClass="p-button-success p-button-sm" label="Like"
+                                    icon="pi pi-heart-fill" (onClick)="handleLike(tweets.tweetId)"></p-button>
+                                <p-button *ngIf="editBox==false" styleClass="p-button-warning p-button-sm"
+                                    label="Comment" icon="pi pi-comment" [style]="{'margin-left': '.5em'}"
+                                    (onClick)="handleComment()"></p-button>
+                                <p-button styleClass="p-button-info p-button-sm" label="Edit" icon="pi pi-pencil"
+                                    [style]="{'margin-left': '.5em'}" (onClick)="handleUpdate(tweets.tweetId)">
+                                </p-button>
+                                <p-button *ngIf="editBox==false" styleClass="p-button-danger p-button-sm" label="Delete"
+                                    icon="pi pi-trash" [style]="{'margin-left': '.5em'}"
+                                    (onClick)="handleDelete(tweets.tweetId)">
+                                </p-button><br><br>
+                                <span class="p-float-label" *ngIf="commentBox==true">
+                                    <textarea id="float-input" [(ngModel)]="tweetsReply.tweetReplyBody" rows="3"
+                                        cols="60" pInputTextarea></textarea>
+                                    <label for="float-input">Add comment...</label>
+                                </span>
+                                <p-button *ngIf="commentBox==true" label="Add comment..." icon="pi pi-comment"
+                                    styleClass="p-button-info"
+                                    (onClick)="postTweetsReply(tweets.tweetId);ClearFields();"></p-button>
+                                <p-tabView>
+                                    <p-tabPanel header="Comments">
+                                        <p-accordion>
+                                            <p-accordionTab *ngFor="let tweetsReply of tweets.replies"
+                                                header="{{tweetsReply.tweetReplyBody}}" [selected]="false">
+                                                Commented by <b> {{tweetsReply.repliedBy}} </b> on <b>
+                                                    {{tweetsReply.datetime |
+                                                    date:'medium':'IST'}} </b>
+                                            </p-accordionTab>
+                                        </p-accordion><br>
+                                    </p-tabPanel>
+                                    <p-tabPanel header="Likes">
+                                        <p *ngFor="let likes of tweets.likedBy">{{likes}}</p>
+                                    </p-tabPanel>
+                                </p-tabView>
+                                <!-- <div *ngFor="let tweetsReply of tweets.replies">
+                                    <h6>{{tweetsReply.repliedBy}}</h6>
+                                    <h6>{{tweetsReply.tweetReplyBody}}</h6>
+                                    <h6>{{tweetsReply.datetime | date:'medium':'IST'}}</h6>
+                                    <br>
+                                </div> -->
+                            </ng-template>
+                        </p-card><br>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="All Tweets">
+                    <div *ngFor="let tweets of allTweets">
+                        <p-card header="{{tweets.userName}}" subheader="{{tweets.datetime | date:'medium':'IST'}}"
+                            [style]="{width: '45 rem'}">
+                            <ng-template pTemplate="body">
+                                <h4>{{tweets.tweetBody}}</h4>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <p-button styleClass="p-button-success p-button-sm" label="Like" icon="pi pi-heart-fill"
+                                    (onClick)="handleLike(tweets.tweetId)"></p-button>
+                                <p-button styleClass="p-button-warning p-button-sm" label="Comment" icon="pi pi-comment"
+                                    [style]="{'margin-left': '.5em'}" (onClick)="handleComment()"></p-button><br><br>
+                                <span class="p-float-label" *ngIf="commentBox==true">
+                                    <textarea id="float-input" [(ngModel)]="tweetsReply.tweetReplyBody" rows="3"
+                                        cols="60" pInputTextarea></textarea>
+                                    <label for="float-input">Add comment...</label>
+                                </span>
+                                <p-button *ngIf="commentBox==true" label="Add comment..." icon="pi pi-comment"
+                                    styleClass="p-button-info"
+                                    (onClick)="postTweetsReply(tweets.tweetId);ClearFields();"></p-button>
+                                <p-tabView>
+                                    <p-tabPanel header="Comments">
+                                        <p-accordion>
+                                            <p-accordionTab *ngFor="let tweetsReply of tweets.replies"
+                                                header="{{tweetsReply.tweetReplyBody}}" [selected]="false">
+                                                Commented by <b> {{tweetsReply.repliedBy}} </b> on <b>
+                                                    {{tweetsReply.datetime |
+                                                    date:'medium':'IST'}} </b>
+                                            </p-accordionTab>
+                                        </p-accordion><br>
+                                    </p-tabPanel>
+                                    <p-tabPanel header="Likes">
+                                        <p *ngFor="let likes of tweets.likedBy">{{likes}}</p>
+                                    </p-tabPanel>
+                                </p-tabView>
+                                <!-- <div *ngFor="let tweetsReply of tweets.replies">
+                                    <h6>{{tweetsReply.repliedBy}}</h6>
+                                    <h6>{{tweetsReply.tweetReplyBody}}</h6>
+                                    <h6>{{tweetsReply.datetime | date:'medium':'IST'}}</h6>
+                                    <br>
+                                </div> -->
+                            </ng-template>
+                        </p-card><br>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Tweets by User">
+                    <p-dropdown [style]="{width:'40%', height: 'auto'}" placeholder="Select User" [options]="usersList"
+                        [(ngModel)]="selectedUser" optionLabel="userName" optionValue="userName"
+                        (onChange)="tweetByUser()"></p-dropdown><br><br>
+                    <div *ngFor="let tweets of usersTweets">
+                        <p-card header="{{tweets.userName}}" subheader="{{tweets.datetime | date:'medium':'IST'}}"
+                            [style]="{width: '45 rem'}">
+                            <ng-template pTemplate="body">
+                                <h4>{{tweets.tweetBody}}</h4>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <p-button styleClass="p-button-success p-button-sm" label="Like" icon="pi pi-heart-fill"
+                                    (onClick)="handleLike(tweets.tweetId)"></p-button>
+                                <p-button styleClass="p-button-warning p-button-sm" label="Comment" icon="pi pi-comment"
+                                    [style]="{'margin-left': '.5em'}" (onClick)="handleComment()"></p-button><br><br>
+                                <span class="p-float-label" *ngIf="commentBox==true">
+                                    <textarea id="float-input" [(ngModel)]="tweetsReply.tweetReplyBody" rows="3"
+                                        cols="60" pInputTextarea></textarea>
+                                    <label for="float-input">Add comment...</label>
+                                </span>
+                                <p-button *ngIf="commentBox==true" label="Add comment..." icon="pi pi-comment"
+                                    styleClass="p-button-info"
+                                    (onClick)="postTweetsReply(tweets.tweetId);ClearFields();"></p-button>
+                                <p-tabView>
+                                    <p-tabPanel header="Comments">
+                                        <p-accordion>
+                                            <p-accordionTab *ngFor="let tweetsReply of tweets.replies"
+                                                header="{{tweetsReply.tweetReplyBody}}" [selected]="false">
+                                                Commented by <b> {{tweetsReply.repliedBy}} </b> on <b>
+                                                    {{tweetsReply.datetime |
+                                                    date:'medium':'IST'}} </b>
+                                            </p-accordionTab>
+                                        </p-accordion><br>
+                                    </p-tabPanel>
+                                    <p-tabPanel header="Likes">
+                                        <p *ngFor="let likes of tweets.likedBy">{{likes}}</p>
+                                    </p-tabPanel>
+                                </p-tabView>
+                            </ng-template>
+                        </p-card><br>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+            <br>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+</div>
+<p-toast position="bottom-center" key="c" (onClose)="onReject()" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div class="flex flex-column" style="flex: 1">
+            <div class="text-center">
+                <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+                <h4>{{message.summary}}</h4>
+                <p>{{message.detail}}</p>
+            </div>
+            <div class="grid p-fluid">
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" pButton (click)="onConfirm(message.data)" label="Yes"
+                            class="p-button-danger"></button>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" pButton (click)="onReject()" label="No" class="p-button-success"></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </ng-template>
+</p-toast>

@@ -1,0 +1,10 @@
+.table{
+    table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid purple;
+}
+
+/* .container-fluid{
+  background-color: rgb(235, 228, 228);
+} */

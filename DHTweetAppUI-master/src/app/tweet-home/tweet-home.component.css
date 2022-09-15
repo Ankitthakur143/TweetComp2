@@ -1,0 +1,16 @@
+::placeholder {
+    color: rgb(94, 92, 91);
+    opacity: 1;
+ }
+
+ :host ::ng-deep .test {
+    margin-top: 50px;
+  }
+  
+  /* .container-fluid{
+    background-color: rgb(243, 241, 241);
+  } */
+
+  .form{
+    background-color: rgb(243, 241, 241);
+  }

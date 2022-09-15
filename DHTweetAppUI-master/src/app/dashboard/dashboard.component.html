@@ -1,0 +1,39 @@
+<p-toast></p-toast>
+<div class="container-fluid">
+    <br><br>
+    <div class="row" style="padding-right: 2%;">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-6">
+            <h1 style="color: blue;">TweetApp</h1>
+            <h3 style="color: red;">TweetApp helps you to share whatever in your mind</h3>
+        </div>
+        <div class="col-sm-4 border border-3 form">
+            <form class="login" #userLoginForm="ngForm">
+                <div class="mb-3">
+                    <h4>Login to TweetApp</h4>
+                    <hr>
+                </div>
+                <div class="mb-3">
+                    <input type="email" class="form-control" id="userName" name="userName"
+                        [(ngModel)]="credentials.userName" #emailCtrl="ngModel" placeholder="Email address"
+                        aria-describedby="emailHelp" required>
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" id="password" name="password"
+                        [(ngModel)]="credentials.password" #passwordCtrl="ngModel" placeholder="Password" required>
+                </div>
+                <button type="submit" [disabled]="credentials.userName=='' || credentials.password==''"
+                    class="btn btn-primary" (click)="login()">Log In</button>
+            </form>
+            <div style="padding-left: 1em;">
+                <a [routerLink]="['/password-reset']">Forgot Password?</a><br>
+                <a [routerLink]="['/sign-up']">Sign up for TweetApp</a><br><br>
+            </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+    </div>
+
+</div>
+<!-- </div> -->

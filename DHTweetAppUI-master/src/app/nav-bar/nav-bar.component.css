@@ -1,0 +1,19 @@
+.a{
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1000;
+    top: 0;
+}
+
+.b{
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1000;
+    bottom: 0;
+    color: white;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+}
