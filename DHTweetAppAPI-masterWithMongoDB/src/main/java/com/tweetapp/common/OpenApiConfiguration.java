@@ -19,7 +19,7 @@ public class OpenApiConfiguration {
 	}
 
 	private Contact apiContact() {
-		return new Contact().name("Anki Thakur").email("Ankitthakur52143@gmail.com")
+		return new Contact().name("Ankit Thakur").email("Ankitthakur52143@gmail.com")
 				.url("https://github.com/Ankitthakur143");
 	}
 
